@@ -1,0 +1,68 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+	<div class="card mb-3 shadow" style="">
+		<div class="card-header py-2">
+			<div class='flex-container'>
+				<div class='row justify-content-between'>
+					<div class='col '>
+						<h3 class="font-weight-light mb-2">{{ record.cost_type }}</h3>
+					</div>
+					<div class='col col-auto text-right'>
+						<a href='{% url 'cost-update' record.id %}' class="btn btn-outline-info" role="button" aria-disabled="true">
+							Update <i class='far fa-edit'></i>
+						</a>
+						<a href='{% url 'cost-delete' record.id %}' class="btn btn-outline-danger" role="button" aria-disabled="true">
+							Delete <i class='far fa-trash-alt'></i>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card-body">
+			<div class="container m-0">
+				<div class="row">
+					<div class='col'>
+						<ul class="list-group list-group-flush">
+							<li class='list-group-item'>
+								<p class='h4 font-weight-light'>Value</p>
+								<span class='h4 font-weight-light text-muted'>£{{ record.value|floatformat:2|intcomma }} p.a.</span>
+							</li>
+							<li class="list-group-item">
+								<p class='h4 font-weight-light'>Start</p>
+								<span class='h4 font-weight-light text-muted'>{{ record.start }} </span>
+							</li>
+							<li class='list-group-item'>
+								<p class='h4 font-weight-light'>End</p>
+								<span class='h4 font-weight-light text-muted'>{{ record.end }} </span>
+							</li>
+						</ul>
+					</div>
+					<div class='col'>
+						<div class="card w-100">
+							<a href='{% url 'building-detail' record.building.id%}'><img class="img-fluid card-img-top w-100" src='{{ record.building.image.url }}' alt="Profile Picture"></a>
+							<div class="card-body border-bottom">
+								<h5 class="card-title"><i class="far fa-building"></i><a href='{% url 'building-detail' record.building.id%}'> {{ record.building.name}}</a></h5>
+							</div>
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item">
+									<i class="fas fa-map-marker-alt fa-md mr-1"></i> {{ record.building.region }}
+								</li>
+								<li class="list-group-item">
+									<i class="fas fa-phone mt-2 fa-md mr-1"></i> 0777 1234 567
+								</li>
+								<li class="list-group-item">
+									<i class="fas fa-envelope mt-2 fa-md mr-1"></i>
+									<a href='mailto:some.body@abc.gov.uk' target="_blank">some.body@abc.gov.uk</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock content %}

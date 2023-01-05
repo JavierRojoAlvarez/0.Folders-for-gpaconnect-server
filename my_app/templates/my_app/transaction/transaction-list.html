@@ -1,0 +1,102 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+<div class='container mb-2 p-0'>
+	<div class='row justify-content-start'>
+		<div class='col-auto'>
+			<h1>Transactions</h1>
+		</div>
+		<div class='col-auto align-self-center p-0'>
+			<a class="btn btn-outline-success align-self-center" href='{% url 'transaction-create' %}' role="button">Create&nbsp;<i class="far fa-edit"></i></a>
+		</div>
+	</div>
+</div>
+<form method='GET'>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<label class="input-group-text">Transaction Type</label>
+		</div>
+		<select class="custom-select" name='region' id='region'>
+			<option value="" hidden
+			{% if not region_id %}
+				selected
+			{% endif %}>
+			All
+			</option>
+			{% for record in region_list %}
+				<option value = {{ record.id }}	{% if region_id == record.id %}
+				selected
+				{% endif %}>
+					{{ record.name }}
+				</option>
+			{% endfor %}
+		</select>
+		<div class="input-group-append">
+			<button type='button' class="btn btn-outline-secondary" id='resetBtnRegion'><i class="fas fa-undo-alt"></i></button>
+		</div>
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<label class="input-group-text">Sort by...</label>
+		</div>
+		<select class="custom-select" name='sort_by' id='sort_by'>
+			{% for k,v in sort_by_list.items %}
+				<option value = '{{ v }}' {% if sort_by_val == v %} selected {% endif %}>
+					{{ k }}
+				</option>
+			{% endfor %}
+		</select>
+		<div class="input-group-append">
+			<button type='button' class="btn btn-outline-secondary" id='resetBtnSort'><i class="fas fa-undo-alt"></i></button>
+		</div>
+		<div class="input-group-append">
+			<select class="form-select bg-light rounded-right border-secondary border-left-2 " name='sort_direction' >
+				{% for k,v in sort_direction_list.items %}
+					<option value = '{{ v }}' {% if sort_direction_val == v %} selected {% endif %}>
+						{{ k }}
+					</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+	<button type="submit" class="btn btn-info">Filter & Sort <i class="fas fa-filter"></i></button>
+	<button type="button" class="btn btn-outline-secondary" id='resetBtnAll'>Reset all <i class="fas fa-undo-alt"></i></button>
+</form>
+<hr>
+
+
+
+<div class="list-group">
+	{% for record in qs %}
+		<a href='{% url 'transaction-update' record.id %}' class="list-group-item list-group-item-action">
+			<div class='container'>
+				<div class='row'>
+					<div class='col'>
+						<h5><span class="badge badge-info badge">£{{record.amount|floatformat:2|intcomma }}</span><h5>
+					</div>
+					<div class='col'>
+						{{ record.date }}
+					</div>
+					<div class='col'>
+						{{ record.contract.contract_type }}
+					</div>
+				</div>
+			</div>
+		</a>
+	{% endfor %}
+</div>
+	{% for entry in record.entry_set.all %}
+		<li class="list-group-item p-1 d-flex justify-content-between align-items-center">
+			<span class='text-muted'>{{ entry.direction.name }}</span>
+			{{ entry.account.description }}
+			<span class="badge badge-info badge">£{{entry.amount|floatformat:2|intcomma }}</span>
+		</li>
+	{% endfor %}
+
+{% endblock content %}
+
+{% block js %}
+	<script src='{% static 'my_app/js/reset.js' %}'></script>
+{% endblock %}

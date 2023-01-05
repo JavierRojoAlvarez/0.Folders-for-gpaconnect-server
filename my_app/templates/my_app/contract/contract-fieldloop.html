@@ -1,0 +1,30 @@
+<div class="row-{{ forloop.counter0 }} formset_row-{{ formset.prefix }} mb-4">
+		<div class="container mb-2">
+			<div class="row">
+			{% for field in form.visible_fields %}
+				<div class='col align-self-center'>
+					{{ field }}
+				</div>
+			{% endfor %}
+			{% if delete_btn %}
+				<div class="col-1 align-self-center">
+					<button class='btn btn-remove-row btn-light rounded-circle' id='{{ forloop.counter0 }}' type="button"><i class="fas fa-times"></i></button>
+				</div>
+			{% endif %}
+			</div>
+			<div class="row">
+			{% for field in form.visible_fields %}
+				<div class='col'>
+					{% if field.errors %}
+						{% for error in field.errors %}
+							<p class='text-danger'>{{ error | safe }}</p>
+						{% endfor %}
+					{% endif %}
+				</div>
+
+				<div class="col-1 align-self-center">
+				</div>
+			{% endfor %}
+			</div>
+		</div>
+</div>

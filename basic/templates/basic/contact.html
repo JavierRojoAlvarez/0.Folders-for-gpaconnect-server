@@ -1,0 +1,31 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+<h3 class="font-weight-light mb-2">Contact Page</h3>
+<div class="container m-0">
+	<div class="row">
+		<p class="text-muted"> For any technical queries about this application see our contact info below</p>
+	</div>
+	<div class="row">
+		<div class="card" style="width: 16rem;">
+			<img class="img-fluid card-img-top" style='width:100%' src='{% static 'basic/jpg/profile.jpg' %}' alt="Profile Picture">
+			<div class="card-body">
+				<h5 class="card-title">Bradley Smith</h5>
+				<p class="card-text text-muted">Investment Appraisals</p>
+			</div>
+			<ul class="list-group list-group-flush">
+			<li class="list-group-item"><i class="fas fa-map-marker-alt fa-md mr-1"></i>
+				10 Victoria Street, London</li>
+			<li class="list-group-item"><i class="fas fa-phone mt-2 fa-md mr-1"></i>
+				0777 1234 567</li>
+			<li class="list-group-item"><i class="fas fa-envelope mt-2 fa-md mr-1"></i>
+				<a href='mailto:bradley.smith@gpa.gov.uk' target="_blank">bradley.smith@gpa.gov.uk</a></li>
+			</ul>
+		</div>
+		<iframe allowtransparency="true" onload="iframe_has_loaded();" style="background: url('{% static '/spinner.svg' %}'); background-repeat: no-repeat; background-position: center;"
+			src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2483.7690669151552!2d-0.13363788482175956!3d51.49910517963376!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604dc82cc28bf%3A0x218cb824f3bdce0!2s10%20Victoria%20St%2C%20Westminster%2C%20London%20SW1H%200NB!5e0!3m2!1sen!2suk!4v1584365017147!5m2!1sen!2suk"
+			width="600" height="400" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0">
+		</iframe>
+	</div>
+</div>
+{% endblock content%}

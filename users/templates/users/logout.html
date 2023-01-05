@@ -1,0 +1,20 @@
+{% extends "users/base.html"%}
+{% block content %}
+{% load static %}
+
+	<div class="container mt-4 w-50 justify-content-center mx-auto">
+		{% csrf_token %}
+		<div class='row'>
+				<div class='col'>
+					<img class="mb-4" src='{% static 'users/png/logo.png' %}' alt="Crest" width="90" height="90">
+					<h1 class="mb-4 ms-2 text-light fw-light d-inline">Government Property Agency</h1>
+				</div>
+		</div>
+		<div class="row">
+			<p class='text-light'>{{ form.non_field_errors | striptags }}</p>
+		</div>
+		<div class='row'>
+			<a href='{% url 'login'%}' class="btn btn-lg btn-block btn-outline-light"></i>Sign In <i class="fas fa-sign-in-alt"></i></a>
+		</div>
+	</div>
+{% endblock content %}

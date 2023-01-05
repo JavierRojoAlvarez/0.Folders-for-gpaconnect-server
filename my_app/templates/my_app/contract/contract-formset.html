@@ -1,0 +1,23 @@
+{{formset.management_form}}
+{% for form in formset %}
+{% for hidden in form.hidden_fields %}
+	{{ hidden }}
+{% endfor %}
+<fieldset>
+		{% for err in form.non_field_errors %}
+			<p style='color:red;'>{{ err }}</p>
+		{% endfor %}
+		{% if forloop.first %}
+		<div class="row">
+			{% for field in form.visible_fields %}
+				<div class='col align-self-center'>
+					{{ field.label }}
+				</div>
+			{% endfor %}
+				<div class='col-1 align-self-center'>
+				</div>
+		</div>
+		{% endif %}
+			{% include 'my_app/contract/contract-fieldloop.html' with delete_btn=True %}
+</fieldset>
+{% endfor %}

@@ -1,0 +1,23 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+<div class="container m-0">
+	<div class="row">
+		{% include 'basic/jumbotron.html' %}
+	</div>
+	<div class='row'>
+		<div class='col'>
+			{% include 'basic/admin-tools.html' %}
+			{% include 'basic/accounting.html' %}
+		</div>
+		<div class='col'>
+			{% include 'basic/menu-card.html' %}
+		</div>
+		<div class='col'>
+			{% include 'basic/twitter-card.html' %}
+		</div>
+	</div>
+</div>
+
+
+{% endblock content %}

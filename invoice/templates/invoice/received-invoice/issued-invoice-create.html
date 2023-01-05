@@ -1,0 +1,69 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+<h1>Issue an Invoice</h1>
+<p>
+	<span class='h5 font-weight-light'>Issue invoice to the customer&nbsp;</span>
+	<span class='h5'>{{payment.contract.organisation}}</span>
+	<span class='h5 font-weight-light'>&nbsp;for their&nbsp;</span>
+	<span class='h5'>{{payment.contract.contract_type}}</span>
+	<span class='h5 font-weight-light'>contract with us&nbsp;</span>
+</p>
+<p>This invoice is associated with the following contract payment</p>
+<div class="list-group mb-4">
+	<div class='container list-group-item'>
+		<div class='row'>
+			<div class='col'>
+				{{ payment.date }}
+			</div>
+			<div class='col'>
+				{{ payment.get_actual_expected_display }}
+			</div>
+			<div class='col'>
+				<h5><span class="badge badge-info badge">£{{payment.amount|floatformat:2|intcomma }}</span><h5>
+			</div>
+		</div>
+	</div>
+</div>
+<h5 class='my-4'>Invoice Details</h5>
+<form class='form-horizontal' method='POST' id='form' novalidate>
+	<fieldset>
+		<div class="container m-0">
+			{% csrf_token %}
+			<input type="hidden" name="next" value="{{ request.GET.next }}">
+			<input type="hidden" name="associated_payment" value="{{ view.kwargs.pk }}">
+			{% for field in form.visible_fields %}
+			<div class="row mb-2">
+				<div class='col col-2'>
+					<p class='text-muted'>{{ field.label }}</p>
+				</div>
+				<div class='col col-6'>
+					{{ field }}
+				</div>
+				<div class='col'>
+					{% if field.errors %}
+						{% for error in field.errors %}
+							<p class='text-danger'>{{ error | safe }}</p>
+						{% endfor %}
+					{% endif %}
+				</div>
+			</div>
+			{% endfor %}
+			<div class='row'>
+				<div class='col-8'>
+					<a href="#" id='previewBtn' class='btn btn-block btn-outline-secondary'>View PDF Preview&nbsp;<i class="far fa-file-pdf"></i></a>
+				</div>
+			</div>
+			<div class='row'>
+				<button class="btn btn-outline-success ml-2 my-4" type="submit">
+					Create <i class="far fa-edit"></i>
+				</button>
+			</div>
+		</div>
+	</fieldset>
+</form>
+{% endblock content %}
+{% block js %}
+	<script src='{% static 'invoice/js/previewInvoice.js' %}'></script>
+{% endblock js %}

@@ -1,0 +1,125 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+<input type='hidden' id='id' value={{id}}></input>
+<div class='container mb-2 p-0'>
+	<div class='row justify-content-start'>
+		<div class='col-auto'>
+			<h1>{{ record.contract_type }}</h1>
+		</div>
+		<div class='col-auto align-self-center p-0'>
+			<a class="btn btn-outline-info align-self-center" href='{% url 'contract-update' record.id %}' role="button">Update&nbsp;<i class="far fa-edit"></i></a>
+		</div>
+	</div>
+</div>
+<div class="card mb-3 shadow-sm" style="">
+	<div class="card-body">
+		<div class='container'>
+			<div class='row'>
+				<div class='col'>
+					<h5 class="font-weight-light">{{ record.get_revenue_expenditure_display }}</h5>
+					<p><span class='text-muted'>from&nbsp;</span><span>{{ record.start_date }}</span><span class='text-muted'>&nbsp;to&nbsp;</span><span>{{ record.end_date }}</span><p>
+					{% if record.building.all %}
+					<h6>Building{% if record.building.count > 1 %}s <span class='text-muted'>({{record.building.count}})</span>{% endif %}</h6>
+						{% for building in record.building.all %}
+								<a href='{% url 'building-detail' building.id %}'><h6>{{ building.name }}</h6></a>
+						{% endfor %}
+					{% endif %}
+
+				</div>
+				<div class='col'>
+					<h5><span class='font-weight-light'>Total Payments</span>&nbsp;£{{record.total_payments|floatformat:2|intcomma }}</h5>
+					<hr>
+					<h5><span class='font-weight-light'>Recognised Asset</span>&nbsp;£{{record.npv|floatformat:2|intcomma }}</h5>
+					<h5><span class='font-weight-light'>Interest Payments</span>&nbsp;£{{record.total_interest|floatformat:2|intcomma }}</h5>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col'>
+					<h6>Description&nbsp;</h6>
+					<p class='text-muted'>{{ record.description }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="list-group mb-4">
+	{% for payment in record.contractpayment_set.all %}
+				<div class='container list-group-item'>
+					<div class='row'>
+						<div class='col'>
+							{{ payment.date }}
+						</div>
+						<div class='col'>
+							{{ payment.get_actual_expected_display }}
+						</div>
+						<div class='col'>
+							<h5><span class="badge badge-info badge">£{{payment.amount|floatformat:2|intcomma }}</span><h5>
+						</div>
+						<div class='col border-left'>
+							{% if not payment.receivedinvoice_set.all and not payment.issuedinvoice_set.all %}
+								<a href='{% url "invoice-create" pk=payment.pk %}?next={{ request.path|urlencode }}' class='btn btn-block btn-light'>Create Invoice&nbsp;<i class="far fa-edit"></i></a>
+							{% else %}
+								<a href='#' class='btn btn-block btn-light'>Update Invoice&nbsp;<i class="far fa-edit"></i></a>
+							{% endif %}
+						</div>
+						<div class='col'>
+							{% if payment.receivedinvoice_set.first.pdf.url %}
+								<a href='{{ payment.receivedinvoice_set.first.pdf.url }}' class='btn btn-block btn-light'>PDF File&nbsp;<i class="far fa-file-pdf"></i></a>
+							{% endif %}
+							{% if payment.issuedinvoice_set.first.pdf.url %}
+								<a href='{{ payment.issuedinvoice_set.first.pdf.url }}' class='btn btn-block btn-light'>PDF File&nbsp;<i class="far fa-file-pdf"></i></a>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+	{% endfor %}
+</div>
+	<h3>Accounting</h3>
+	<h6 class='text-muted'>IFRS16</h6>
+	{% regroup record.transaction_set.all by time_index as accounting_list %}
+	{% for time_index,transactions in accounting_list %}
+		<div class="list-group mb-4">
+		{% for transaction in transactions %}
+			{% if transaction.treatment %}
+				<div class='container list-group-item p-2'>
+					<div class='row'>
+						<div class='col'>
+							{{ transaction.date }}
+						</div>
+						<div class='col'>
+							{{ transaction.transaction_type }}
+						</div>
+						<div class='col'>
+							{{ transaction.get_actual_expected_display }}
+						</div>
+						<div class='col'>
+							<h5><span class="badge badge-info badge">£{{transaction.amount|floatformat:2|intcomma }}</span><h5>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+		{% endfor %}
+	</div>
+	{% endfor %}
+</div>
+<div class='container'>
+	<div class='row justify-content-center' id='spinner'>
+		<div class="mt-4 spinner-border text-info" role="status" >
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>
+	<div class='row'>
+		<canvas id="myLine"></canvas>
+	</div>
+	<div class='row text-muted text-right' id='source' style='display:none;'>
+		<small><b>Lease Liablility&nbsp;</b>IFRS16</small>
+		<hr>
+	</div>
+</div>
+{% endblock content %}
+
+{% block js %}
+	<script src='{% static 'my_app/js/liability.js' %}'></script>
+{% endblock %}

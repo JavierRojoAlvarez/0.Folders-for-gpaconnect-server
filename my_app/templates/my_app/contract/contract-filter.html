@@ -1,0 +1,52 @@
+{% load static %}
+
+<form method="GET" novalidate>
+	<div class='mb-2'>
+		{% for filter_group in form.filter_groups %}
+			<div class='row mb-2'>
+				{% for field in form %}
+					{% if field.name in filter_group %}
+						<div class='col text-muted'>
+							<div class='input-group'>
+								<div class="input-group-prepend">
+									<button class="btn btn-outline-secondary" type="button">{{field.label}}</button>
+								</div>
+								{{ field }}
+							</div>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		{% endfor %}
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<label class="input-group-text">Sort by...</label>
+		</div>
+		<select class="custom-select" name='sort_by' id='sort_by'>
+			{% for field in form %}
+				{% if field.name in form.sort_by_fields %}
+					<option value = '{{ field.name }}' {% if request.GET.sort_direction == v %} selected {% endif %}>
+						{{ field.label }}
+					</option>
+				{% endif %}
+			{% endfor %}
+		</select>
+		<div class="input-group-append">
+			<button type='button' class="btn btn-outline-secondary" id='resetBtnSort'><i class="fas fa-undo-alt"></i></button>
+		</div>
+		<div class="input-group-append">
+			<div class="input-group-append">
+				<select class="form-select bg-light rounded-right border-secondary border-left-2 " name='sort_direction' >
+					{% for k,v in sort_direction_list.items %}
+						<option value = '{{ v }}' {% if request.GET.sort_direction == v %} selected {% endif %}>
+							{{ k }}
+						</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+	</div>
+	<button type="submit" class="btn btn-info">Filter & Sort <i class="fas fa-filter"></i></button>
+	<button type="button" class="btn btn-outline-secondary" id='resetBtnAll'>Reset all <i class="fas fa-undo-alt"></i></button>
+</form>

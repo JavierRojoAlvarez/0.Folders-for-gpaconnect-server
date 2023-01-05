@@ -1,0 +1,14 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+<h3 class="font-weight-light mb-2">About</h3>
+<div class="container m-0">
+	<div class="row">
+		<p class="text-muted"> Please see presentation below on this specific web application and web applications in general.</p>
+	</div>
+	<div class='row'>
+		<iframe allowtransparency="true" onload="iframe_has_loaded();" style="background: url('{% static 'funding/spinner.svg' %}'); background-repeat: no-repeat; background-position: center;"
+		src="https://docs.google.com/presentation/d/e/2PACX-1vQ-jX2kl2v3RxFMo7M2ZVZ60xX25tppKLxfhmdDN-zyVlSbFop-9RhgGYubbDX3hPQoFY2GeI-R9yx-/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+	</div>
+</div>
+{% endblock content%}

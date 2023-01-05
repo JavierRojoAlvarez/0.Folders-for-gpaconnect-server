@@ -1,0 +1,15 @@
+{% extends "invoice/base-pdf.html"%}
+{% block content %}
+{% load static %}
+{% load humanize %}
+<img style='display:inline;background-color:coral;' height='50px' src='file:///R:/14. WebApp/010/base/my_app/static/my_app/png/logo.png' alt="Profile Picture">
+<h1 style='font-size:50px;display:inline;margin:10px;font-weight:lighter;'>Invoice</h1>
+<h2 style='font-size:20px;font-weight:lighter;'>Government Property Agency</h2>
+<h1 style='font-size:15px;font-weight:lighter;'>Billed to:&nbsp;{{ associated_payment.contract.organisation }}</h1>
+<h1 style='font-size:15px;font-weight:lighter;'>Contract:&nbsp;{{ associated_payment.contract.contract_type }}</h1>
+<hr>
+<p style='font-size:12px;'>Invoice Number:&nbsp;{{ number }}</p>
+<p style='font-size:12px;'>Date of Issue:&nbsp;{{ date_issued }}</p>
+<h1 style='font-size:15px;font-weight:lighter;'>Amount:&nbsp;{{ amount }}</h1>
+<hr>
+{% endblock content %}

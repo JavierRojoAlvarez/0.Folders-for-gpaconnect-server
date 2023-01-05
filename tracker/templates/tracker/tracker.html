@@ -1,0 +1,21 @@
+{% extends "tracker/base/base.html"%}
+{% block content %}
+{% load static %}
+<div class='container'>
+	<div class='row justify-content-center' id='spinner'>
+		<div class="mt-4 spinner-border text-info" role="status" >
+			<span class="sr-only">Loading...</span>
+		</div>
+	</div>
+	<div class='row'>
+		<canvas id="myLine"></canvas>
+	</div>
+	<div class='row text-muted text-right' id='source' style='display:none;'>
+		<small><b>Source&nbsp;</b>EU Open Data Portal</small>
+		<hr>
+	</div>
+	<div class='row'>
+		<canvas id="myPie"></canvas>
+	</div>
+</div>
+{% endblock %}

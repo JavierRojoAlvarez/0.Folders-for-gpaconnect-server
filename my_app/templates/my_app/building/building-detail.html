@@ -1,0 +1,120 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+<div class='flex-container'>
+	<div class='row justify-content-between'>
+		<div class='col '>
+			<h1>{{ record.name }}</h1>
+		</div>
+		<div class='col col-auto text-right'>
+			<a href='{% url 'building-update' record.id %}' class="btn btn-outline-info" role="button" aria-disabled="true">
+				Update <i class='far fa-edit'></i>
+			</a>
+			<a href='{% url 'building-delete' record.id %}' class="btn btn-outline-danger" role="button" aria-disabled="true">
+				Delete <i class='far fa-trash-alt'></i>
+			</a>
+		</div>
+	</div>
+</div>
+	<div class="flex-container">
+				<div class="row">
+					<div class='col'>
+						<div class="card w-100">
+							<img class="img-fluid card-img-top w-100" src='{{ record.image.url }}' alt="Profile Picture">
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item">
+									<i class="fas fa-map-marker-alt fa-md mr-1"></i> {{ record.region }}
+								</li>
+								<li class="list-group-item">
+									<i class="fas fa-phone mt-2 fa-md mr-1"></i> 0777 1234 567
+								</li>
+								<li class="list-group-item">
+									<i class="fas fa-envelope mt-2 fa-md mr-1"></i>
+									<a href='mailto:some.body@abc.gov.uk' target="_blank">some.body@abc.gov.uk</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div class='col'>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">
+								<p class='h4 font-weight-light'>ePIMS ID</p>
+								<span class='h4 font-weight-light text-muted'>{{ record.epims_id }} </span>
+							</li>
+							<li class='list-group-item'>
+								<p class='h4 font-weight-light'>FTEs Capacity</p>
+								<span class='h4 font-weight-light text-muted'>{{ record.ftes_capacity|floatformat:2|intcomma }} </span>
+							</li>
+							<li class='list-group-item'>
+								<p class='h4 font-weight-light'>NIA</p>
+								<span class='h4 font-weight-light text-muted'>{{ record.nia|floatformat:2|intcomma }}m<sup>2</sup></span>
+							</li>
+							<li class='list-group-item'>
+								<p class='h4 font-weight-light'>Contracts</p>
+								<span class='h4 font-weight-light text-muted'>{{ record.contract_set.count|intcomma }}</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+<h3 class='my-4'>Contracts</h3>
+{% for record in record.contract_set.all %}
+	<div class="card mb-3 shadow-sm" style="">
+	<div class="card-header py-2">
+		<div class='flex-container'>
+			<div class='row align-items-center justify-content-between'>
+				<div class='col-auto align-self-center'>
+					<a href='{% url 'contract-detail' record.id %}'><h4 class='d-inline'>{{ record.contract_type }}</h4></a>
+				</div>
+				<div class='col pl-0'>
+					<a href="#" class="badge badge-info">{{ record.organisation }}</a>
+				</div>
+				<div class='col col-auto text-right'>
+					<a href='{% url 'contract-update' record.id %}' class="btn btn-sm btn-outline-info border-0" role="button" aria-disabled="true">
+						<i class='far fa-edit'></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		<div class='container'>
+			<div class='row'>
+				<div class='col'>
+					<h5 class="font-weight-light">{{ record.get_revenue_expenditure_display }}</h5>
+					<p><span class='text-muted'>from&nbsp;</span><span>{{ record.start_date }}</span><span class='text-muted'>&nbsp;to&nbsp;</span><span>{{ record.end_date }}</span><p>
+					{% if record.building.all %}
+					<h6>Building{% if record.building.count > 1 %}s <span class='text-muted'>({{record.building.count}})</span>{% endif %}</h6>
+						{% for building in record.building.all %}
+								<a href='{% url 'building-detail' building.id %}'><h6>{{ building.name }}</h6></a>
+						{% endfor %}
+					{% endif %}
+				</div>
+				<div class='col'>
+					<h5><span class='font-weight-light'>Total Payments</span>&nbsp;£{{record.total_payments|floatformat:2|intcomma }}</h5>
+					<hr>
+					<h5><span class='font-weight-light'>Recognised Asset</span>&nbsp;£{{record.npv|floatformat:2|intcomma }}</h5>
+					<h5><span class='font-weight-light'>Interest Payments</span>&nbsp;£{{record.total_interest|floatformat:2|intcomma }}</h5>
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col'>
+					<a class="btn-sm btn-secondary my-2" data-toggle="collapse" href="#collapse-{{record.id}}" role="button" aria-expanded="false" aria-controls="collapse-{{record.id}}">
+						Details
+					</a>
+					<ul class="list-group collapse mt-2" id="collapse-{{record.id}}">
+							<li class="list-group-item">
+								<p>Description&nbsp;</p>
+								<p class='text-muted'>{{ record.description }}</p>
+							</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	{% empty %}
+	<p class='text-muted'>No contracts for this building</p>
+{% endfor %}
+{% endblock content %}

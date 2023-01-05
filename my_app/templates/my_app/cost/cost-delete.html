@@ -1,0 +1,14 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+<h3 class="font-weight-light mb-2">Are you sure you want to delete <b>{{ record.cost_type }}</b> from {{record.start}} to {{record.end}}?</h3>
+<form action='' method='POST'>
+	{% csrf_token %}
+	<button class="btn btn-outline-danger" type="submit">Yes <i class="far fa-trash-alt"></i></button>
+	<a href='{% url 'cost-detail' record.id %}' class="btn btn-outline-secondary" role="button" aria-disabled="true">
+		No <i class="fas fa-undo-alt"></i>
+	</a>
+</form>
+
+{% endblock content %}

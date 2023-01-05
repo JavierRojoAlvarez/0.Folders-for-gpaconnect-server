@@ -1,0 +1,67 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-info mb-3">
+	<a class="navbar-brand" href='{% url 'home-template' %}'><img src='{% static 'basic/png/logo.png' %}' width="50" height="50" class="d-inline-block align-top img-responsive" alt="Civil Service Crest"></a>
+	<a class="navbar-brand" href='{% url 'home-template' %}'><h2 class='font-weight-light text-wrap'>Government Property Agency App</h2></a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item {{ home_template_active }}">
+					<a class="nav-link" href='{% url 'home-template' %}'>Home</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle {{ asset_management_active }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Asset Management
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="d-flex align-items-center justify-content-between dropdown-item {{asset_management_list_active}}" href='{% url 'building-list' %}'><span>List</span><i class="fas fa-list"></i></a>
+						<a class="d-flex align-items-center justify-content-between dropdown-item {{asset_management_create_active}}" href='{% url 'building-create' %}'><span>Create</span><i class="far fa-edit"></i></a>
+					</div>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle {{ contract_active }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Contracts
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="d-flex align-items-center justify-content-between dropdown-item {{contract_list_active}}" href='{% url 'contract-list' %}'><span>List</span><i class="fas fa-list"></i></a>
+						<a class="d-flex align-items-center justify-content-between dropdown-item {{contract_create_active}}" href='{% url 'contract-create' %}'><span>Create</span><i class="far fa-edit"></i></a>
+					</div>
+				</li>
+				<li class="nav-item dropdown ">
+					<a class="nav-link dropdown-toggle {{ transaction_active }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Transactions
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="d-flex align-items-center justify-content-between dropdown-item {{transaction_list_active}}" href='{% url 'transaction-list' %}'><span>List</span><i class="fas fa-list"></i></a>
+						<a class="d-flex align-items-center justify-content-between dropdown-item {{transaction_create_active}}" href='{% url 'transaction-create' %}'><span>Create</span><i class="far fa-edit"></i></a>
+					</div>
+				</li>
+				<li class="nav-item dropdown ">
+					<a class="nav-link dropdown-toggle {{ accounting_active }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Accounting
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="d-flex align-items-center justify-content-between dropdown-item {{pl_active}}" href="{% url 'statements' %}?statement=pl"><span>Income Statement</span><i class="ml-2 fas fa-money-bill-wave"></i></a>
+						<a class="d-flex align-items-center justify-content-between dropdown-item {{balance_sheet_active}}"href="{% url 'statements' %}?statement=balance_sheet"><span>Balance Sheet</span><i class="fas fa-balance-scale-right"></i></a>
+					</div>
+				</li>
+				<li class="nav-item dropdown ">
+					<a class="nav-link dropdown-toggle {{ info_active }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Info
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="d-flex align-items-center justify-content-between dropdown-item" href='#'><span>Help</span><i class="fas fa-question-circle"></i></a>
+						<a class="d-flex align-items-center justify-content-between dropdown-item {{ about_template_active }}" href='{% url 'about-template' %}' ><span>About</span><i class="fas fa-info-circle"></i></a>
+						<div class="dropdown-divider"></div>
+						<a class="d-flex align-items-center justify-content-between dropdown-item {{ contact_template_active }}" href='{% url 'contact-template' %}'><span>Contact</span><i class="fas fa-address-book"></i></a>
+					</div>
+				</li>
+			</ul>
+			{% if user.is_authenticated %}
+					<a class="nav-link btn btn-sm btn-light text-dark"  href='{% url 'logout' %}'>Logout</a>
+			{% else %}
+					<a class="nav-link btn btn-sm btn-light text-dark"  href='{% url 'login' %}'>Login</a>
+			{% endif %}
+		</div>
+</nav>

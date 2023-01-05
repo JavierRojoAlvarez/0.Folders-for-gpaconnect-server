@@ -1,0 +1,113 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+<div class='container mb-2 p-0'>
+	<div class='row justify-content-start'>
+		<div class='col-auto'>
+			<h1>Accounting</h1>
+			<div class="custom-control custom-switch">
+				<input type="checkbox" class="custom-control-input" id="customSwitch1">
+				<label class="custom-control-label" for="customSwitch1">Show only actuals</label>
+			</div>
+		</div>
+	</div>
+</div>
+<hr>
+
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+	<li class="nav-item" role="presentation">
+		<a class="nav-link {{pl_active}}" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Income & Expenditure</a>
+	</li>
+	<li class="nav-item" role="presentation">
+		<a class="nav-link {{balance_sheet_active}}" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Balance Sheet</a>
+	</li>
+	<li class="nav-item" role="presentation">
+		<a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Cash Flows</a>
+	</li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+	<div class="tab-pane fade  {{pl_show}} {{pl_active}}" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+		<h3>Statement of Comprehensive Net Expenditure</h3>
+		<h6 class='text-muted'> as of {{date_threshold}}</h6>
+		<hr>
+		{% for group in income_statement %}
+			<div class='container'>
+				<div class='row'>
+					<div class='col'>
+						<h5>{{ group.title }}</h5>
+					</div>
+				</div>
+			{% for item in group.data %}
+				<div class='row'>
+					<div class='col ml-2'>
+						<h6>{{ item.label }}</h6>
+					</div>
+					<div class='col-6'>
+						{{ item.qs.grand_total }}
+					</div>
+				</div>
+				{% if item.qs %}
+					{% for record in item.qs %}
+						<div class='row'>
+							<div class='col ml-4'>
+								<h6 class='text-muted'>{{ record.account__description }}</h6>
+							</div>
+							<div class='col-6'>
+								<p class='text-muted'>{{ record.subtotal|floatformat:2|intcomma }}</p>
+							</div>
+						</div>
+					{% endfor %}
+				{% endif %}
+			{% endfor %}
+		{% endfor %}
+		</div>
+	</div>
+	<div class="tab-pane fade {{balance_sheet_show}} {{balance_sheet_active}}" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+		<h3>Statement of Financial Position</h3>
+		<h6 class='text-muted'> as of {{date_threshold}}</h6>
+		<hr>
+		{% for group in balance_sheet %}
+			<div class='container'>
+				<div class='row'>
+					<div class='col'>
+						<h5>{{ group.title }}</h5>
+					</div>
+				</div>
+			{% for item in group.data %}
+				<div class='row'>
+					<div class='col ml-2'>
+						<h6>{{ item.label }}</h6>
+					</div>
+					<div class='col-6'>
+						{{ item.qs.grand_total|intcomma }}
+					</div>
+				</div>
+				{% if item.qs %}
+					{% for record in item.qs %}
+						<div class='row'>
+							<div class='col ml-4'>
+								<h6 class='text-muted'>{{ record.account__description }}</h6>
+							</div>
+							<div class='col-6'>
+								<p class='text-muted'>{{ record.subtotal|floatformat:2|intcomma }}</p>
+							</div>
+						</div>
+					{% endfor %}
+				{% endif %}
+			{% endfor %}
+		</div>
+		<hr>
+		{% endfor %}
+	</div>
+	<div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+		<h3>Statement of Cashflows</h3>
+	</div>
+</div>
+{{ active_statement }}
+{% endblock content %}
+
+{% block js %}
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+{% endblock js %}

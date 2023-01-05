@@ -1,0 +1,59 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+
+{% include 'basic/dashboard-cards.html' %}
+<small class='text-muted d-flex justify-content-end mb-2'>
+	<span clas='align-items-center'>
+		<i class='fas fa-info-circle'></i>
+	</span>
+	&nbsp;The above figures are for guidance purposes only. Please consult someone for more details.
+</small>
+
+
+{% include 'my_app/building/building-filter.html' %}
+
+{% for record in qs %}
+	<div class="card mb-3 shadow-sm">
+		<div class='card-body'>
+			<div class='flex-container'>
+				<div class='row justify-content-between'>
+					<div class='col'>
+						<a href='{% url 'building-detail' record.id %}'><h6>{{ record.name }}</h6></a>
+					</div>
+					<div class='col col-auto text-right'>
+						<a href='{% url 'building-update' record.id %}' class="btn btn-sm btn-outline-info border-0" role="button" aria-disabled="true">
+							<i class='far fa-edit'></i>
+						</a>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col'>
+						<p class="card-text text-muted"> {{ record.region }} </p>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col'>
+						<a class="btn-sm btn-info" data-toggle="collapse" href="#collapse-{{record.id}}" role="button" aria-expanded="false" aria-controls="collapse-{{record.id}}">
+							Details
+						</a>
+						<ul class="list-group collapse mt-2" id="collapse-{{record.id}}">
+								<li class="list-group-item">
+									<p>NIA<span class='text-muted'>&nbsp;{{ record.nia|floatformat:2|intcomma }}m<sup>2</sup></span></p>
+									<p>FTEs Capacity<span class='text-muted'>&nbsp;{{ record.ftes_capacity|floatformat:2|intcomma }}</span></p>
+									<p>Contracts<span class='text-muted'>&nbsp;{{ record.contract_set.count }} </span></p>
+								</li>
+						</ul>
+					</div>
+				</div
+				>
+			</div>
+		</div>
+	</div>
+{% endfor %}
+{% endblock content %}
+
+{% block js %}
+	<script src='{% static 'my_app/js/reset.js' %}'></script>
+{% endblock %}

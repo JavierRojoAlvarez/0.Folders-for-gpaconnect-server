@@ -1,0 +1,41 @@
+:root {
+	--dark-purple:rgb(120, 22, 144);
+	--vivid-purple:rgb(175, 22, 133);
+}
+
+.bg-dark-purple {
+	background-color: var(--dark-purple);
+}
+
+.bg-vivid-purple {
+	background-color: var(--vivid-purple);
+}
+
+.bg-gradient-purple {
+	background-image: linear-gradient(var(--dark-purple),var(--vivid-purple));
+}
+
+.bg-moving {
+    background: linear-gradient(143deg, #781690, #af1686, #00b2a9, #ff671f);
+    background-size: 800% 800%;
+
+    -webkit-animation: bg-gradient 44s ease infinite;
+    -moz-animation: bg-gradient 44s ease infinite;
+    animation: bg-gradient 44s ease infinite;
+}
+
+@-webkit-keyframes bg-gradient {
+    0%{background-position:0% 77%}
+    50%{background-position:100% 24%}
+    100%{background-position:0% 77%}
+}
+@-moz-keyframes bg-gradient {
+    0%{background-position:0% 77%}
+    50%{background-position:100% 24%}
+    100%{background-position:0% 77%}
+}
+@keyframes bg-gradient {
+    0%{background-position:0% 77%}
+    50%{background-position:100% 24%}
+    100%{background-position:0% 77%}
+}

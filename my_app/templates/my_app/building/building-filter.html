@@ -1,0 +1,58 @@
+{% load static %}
+
+<form class='mb-4' method='GET'>
+	<div class='mb-2'>
+		<h3 class=' font-weight-light d-inline'>Filter & Sort </h3><i class="fas fa-filter text-muted"></i>
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<label class="input-group-text">Region</label>
+		</div>
+		<select class="custom-select" name='region' id='region'>
+			<option value="" hidden
+			{% if not region_id %}
+				selected
+			{% endif %}>
+			All
+			</option>
+			{% for record in region_list %}
+				<option value = {{ record.id }}
+				{% if request.GET.region == record.id|slugify %}
+					selected
+				{% endif %}>
+					{{ record.name }}
+				</option>
+			{% endfor %}
+		</select>
+		<div class="input-group-append">
+			<button type='button' class="btn btn-outline-secondary" id='resetBtnRegion'><i class="fas fa-undo-alt"></i></button>
+		</div>
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<label class="input-group-text">Sort by...</label>
+		</div>
+		<select class="custom-select" name='sort_by' id='sort_by'>
+			{% for k,v in sort_by_list.items %}
+				<option value = '{{ v }}' {% if request.GET.sort_by == v %} selected {% endif %}>
+					{{ k }}
+				</option>
+			{% endfor %}
+		</select>
+		<div class="input-group-append">
+			<button type='button' class="btn btn-outline-secondary" id='resetBtnSort'><i class="fas fa-undo-alt"></i></button>
+		</div>
+		<div class="input-group-append">
+			<select class="form-select bg-light rounded-right border-secondary border-left-2 " name='sort_direction' >
+				{% for k,v in sort_direction_list.items %}
+					<option value = '{{ v }}' {% if request.GET.sort_direction == v %} selected {% endif %}>
+						{{ k }}
+					</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+	<button type="submit" class="btn btn-info">Filter & Sort <i class="fas fa-filter"></i></button>
+	<button type="button" class="btn btn-outline-secondary" id='resetBtnAll'>Reset all <i class="fas fa-undo-alt"></i></button>
+</form>

@@ -1,0 +1,126 @@
+{% extends 'basic/base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+
+{% include 'my_app/dashboard-cards.html' %}
+<hr class='m-0'>
+<small class='text-muted d-flex justify-content-end mb-2'>
+	<span clas='align-items-center'>
+		<i class='fas fa-info-circle'></i>
+	</span>
+	&nbsp;The above figures are for guidance purposes only. Please consult someone for more details.
+</small>
+
+
+<form method='GET'>
+	<div class='mb-2'>
+		<h3 class=' font-weight-light d-inline'>Filter & Sort </h3><i class="fas fa-filter text-muted"></i>
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<label class="input-group-text">Region</label>
+		</div>
+		<select class="custom-select" name='region' id='region'>
+			<option value="" hidden
+			{% if not region_id %}
+				selected
+			{% endif %}>
+			All
+			</option>
+			{% for record in region_list %}
+				<option value = {{ record.id }}	{% if region_id == record.id %}
+				selected
+				{% endif %}>
+					{{ record.name }}
+				</option>
+			{% endfor %}
+		</select>
+		<div class="input-group-append">
+			<button type='button' class="btn btn-outline-secondary" id='resetBtnRegion'><i class="fas fa-undo-alt"></i></button>
+		</div>
+	</div>
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<label class="input-group-text">Sort by...</label>
+		</div>
+		<select class="custom-select" name='sort_by' id='sort_by'>
+			{% for k,v in sort_by_list.items %}
+				<option value = '{{ v }}' {% if sort_by_val == v %} selected {% endif %}>
+					{{ k }}
+				</option>
+			{% endfor %}
+		</select>
+		<div class="input-group-append">
+			<button type='button' class="btn btn-outline-secondary" id='resetBtnSort'><i class="fas fa-undo-alt"></i></button>
+		</div>
+		<div class="input-group-append">
+			<select class="form-select bg-light rounded-right border-secondary border-left-2 " name='sort_direction' >
+				{% for k,v in sort_direction_list.items %}
+					<option value = '{{ v }}' {% if sort_direction_val == v %} selected {% endif %}>
+						{{ k }}
+					</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+	<button type="submit" class="btn btn-info">Filter & Sort <i class="fas fa-filter"></i></button>
+	<button type="button" class="btn btn-outline-secondary" id='resetBtnAll'>Reset all <i class="fas fa-undo-alt"></i></button>
+</form>
+<hr>
+
+{% for record in qs %}
+
+	<div class="card mb-3 shadow" style="">
+		<div class="card-header py-2">
+			<div class='flex-container'>
+				<div class='row justify-content-between'>
+					<div class='col '>
+						<a href='{% url 'building-detail' record.id %}'><h4>{{ record.cost_type }}</h4></a>
+					</div>
+					<div class='col col-auto text-right'>
+						<a href='{% url 'building-update' record.id %}' class="btn btn-sm btn-outline-info border-0" role="button" aria-disabled="true">
+							<i class='far fa-edit'></i>
+						</a>
+					</div>
+				</div>
+				<div class='row'>
+					<div class='col'>
+						{% if record.landlord %}
+							<span class="badge badge-pill badge-info">Landlord</span>
+						{% endif %}
+						{% if record.portfolio %}
+							<span class="badge badge-pill badge-info">Portfolio</span>
+						{% endif %}
+						{% if record.workplace %}
+							<span class="badge badge-pill badge-info">Workplace</span>
+						{% endif %}
+						{% if record.moj_managed %}
+							<span class="badge badge-pill badge-warning">MoJ Managed</span>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card-body">
+			<ul class="list-group list-group-flush">
+				<li class="list-group-item">
+					<h5 class="card-title">{{ record.building }}</h5>
+					<p class="card-text text-muted"> {{ record.start }} </p>
+				</li>
+				<li class="list-group-item">
+					<p> Total Charges <span class='text-muted'>£{{ record.value|floatformat:2|intcomma }} </span></p>
+					<p> NIA <span class='text-muted'>{{ record.nia|floatformat:2|intcomma }}m<sup>2</sup></span></p>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+{% endfor %}
+
+{% block js %}
+	<script src='{% static 'my_app/js/reset.js' %}'></script>
+{% endblock %}
+
+{% endblock content %}
